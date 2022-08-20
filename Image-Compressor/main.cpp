@@ -4,9 +4,15 @@
  *
 **/
 
-#include "framee.h"
+#include <iostream>
+#include <vector>
+#include "cs221util/catch.hpp"
+
+#include "cs221util/HSLAPixel.h"
 #include "cs221util/PNG.h"
 
+#include "ptree.h"
+#include "hue_utils.h"
 
 int main() {
 

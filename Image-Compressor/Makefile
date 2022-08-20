@@ -1,18 +1,18 @@
-EXEPTree = testPTree
-OBJS  = PNG.o HSLAPixel.o lodepng.o hue_utils.o testPTree.o ptree.o
+EXEPTree = main
+OBJS  = PNG.o HSLAPixel.o lodepng.o hue_utils.o main.o ptree.o
 
 CXX = clang++
 CXXFLAGS = -stdlib=libc++ -std=c++1y -c -g -O0 -Wall -Wextra -pedantic
 LD = clang++
 LDFLAGS = -stdlib=libc++ -std=c++1y -lc++abi -lpthread -lm
 
-all : testPTree
+all : main
 
 $(EXEPTree) : $(OBJS)
 	$(LD) $(OBJS) $(LDFLAGS) -o $(EXEPTree)
 
-testPTree.o : testPTree.cpp ptree.h ptree-private.h cs221util/PNG.h cs221util/HSLAPixel.h
-	$(CXX) $(CXXFLAGS) testPTree.cpp
+main.o : main.cpp ptree.h ptree-private.h cs221util/PNG.h cs221util/HSLAPixel.h
+	$(CXX) $(CXXFLAGS) main.cpp
 
 ptree.o : ptree.cpp ptree.h ptree-private.h hue_utils.h
 	$(CXX) $(CXXFLAGS) -Wfloat-conversion ptree.cpp

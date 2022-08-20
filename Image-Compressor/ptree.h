@@ -14,7 +14,7 @@
 #include "cs221util/HSLAPixel.h"
 
 using namespace std;
-using namespace cs221utilcompressor;
+using namespace cs221util;
 
 class Node {
   public:
