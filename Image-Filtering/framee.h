@@ -12,5 +12,8 @@ PNG boxBlur(PNG image);
 PNG sharpen(PNG image);
 PNG ridgeDetect(PNG image);
 PNG edgeDetect(PNG image);
+PNG adjustBrightness(PNG image, double factor);
+PNG adjustVibrance(PNG image, double factor) ;
+PNG adjustWarmth(PNG image, double factor);
 
 #endif

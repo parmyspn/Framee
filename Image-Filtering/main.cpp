@@ -12,6 +12,18 @@
 int main() {
   cs221util::PNG png, png2, result;
 
+  png.readFromFile("rosegarden.png");
+  result = adjustWarmth(png, -100);
+  result.writeToFile("out-warmth.png");
+
+
+  png.readFromFile("rosegarden.png");
+  result = adjustBrightness(png, 50);
+  result.writeToFile("out-brightness.png");
+
+  png.readFromFile("rosegarden.png");
+  result = adjustVibrance(png, 50);
+  result.writeToFile("out-vibrance.png");
 
 
   png.readFromFile("rosegarden.png");

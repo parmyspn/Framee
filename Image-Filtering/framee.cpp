@@ -17,15 +17,9 @@ using namespace cs221util;
  * @return The grayscale image.
  */
 PNG grayscale(PNG image) {
-  /// This function is already written for you so you can see how to
-  /// interact with our PNG class.
   for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
       HSLAPixel *pixel = image.getPixel(x, y);
-
-      // `pixel` is a pointer to the memory stored inside of the PNG `image`,
-      // which means you're changing the image directly.  No need to `set`
-      // the pixel since you're directly changing the memory of the image.
       pixel->s = 0;
     }
   }
@@ -181,34 +175,19 @@ PNG boxBlur(PNG image) {
 
 PNG sharpen(PNG image) {
  
-
    static double l[1080][1080];
-   static double s[1080][1080];
-   static double h[1080][1080];
-   static double a[1080][1080];
- 
-
-   
-   
 
    for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
       HSLAPixel *pixel = image.getPixel(x, y);
-      l[x][y] = pixel -> l ;
-      h[x][y] = pixel -> h;
-      s[x][y] = pixel ->s;
-      a[x][y] = pixel ->a;
-     
+      l[x][y] = pixel -> l ;   
     } 
   }
   
   for (unsigned x = 1; x < image.width()-1; x++) {
     for (unsigned y = 1; y < image.height()-1; y++) {
       HSLAPixel *pixel = image.getPixel(x, y);
-      pixel -> h = (- h[x-1][y]  - h[x][y-1] + 5* h[x][y] - h[x][y+1] - h[x+1][y] ) ;
-      pixel ->s = (- s[x-1][y]  - s[x][y-1] + 5* s[x][y] - s[x][y+1] - s[x+1][y] ) ;
       pixel ->l = (- l[x-1][y]  - l[x][y-1] + 5* l[x][y] - l[x][y+1] - l[x+1][y] ) ;
-      pixel -> a =  (- a[x-1][y]  - a[x][y-1] + 5* a[x][y] - a[x][y+1] - a[x+1][y] ) ;
     } 
   }
  
@@ -241,7 +220,7 @@ PNG ridgeDetect(PNG image) {
     for (unsigned y = 1; y < image.height()-1; y++) {
       HSLAPixel *pixel = image.getPixel(x, y);
       //pixel ->h = -h[x-1][y-1] -h[x-1][y] - h[x-1][y+1] - h[x][y-1] + 8 * h[x][y] - h[x][y+1] - h[x+1][y-1] - h[x+1][y] - h[x+1][y+1] ;
-      pixel ->s = -s[x-1][y-1] - s[x-1][y] - s[x-1][y+1] - s[x][y-1] + 8 * s[x][y] - s[x][y+1] - s[x+1][y-1] - s[x+1][y] - s[x+1][y+1] ;
+      //pixel ->s = -s[x-1][y-1] - s[x-1][y] - s[x-1][y+1] - s[x][y-1] + 8 * s[x][y] - s[x][y+1] - s[x+1][y-1] - s[x+1][y] - s[x+1][y+1] ;
       pixel->l = -l[x-1][y-1] - l[x-1][y] - l[x-1][y+1] - l[x][y-1] + 8 * l[x][y] - l[x][y+1] - l[x+1][y-1] - l[x+1][y] - l[x+1][y+1];
       
     } 
@@ -288,5 +267,72 @@ PNG edgeDetect(PNG image) {
       
     } 
   }
+  return image;
+}
+
+
+
+PNG adjustBrightness(PNG image, double factor) {
+  if(!factor) return image;
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel *pixel = image.getPixel(x, y);
+      pixel ->l = max(0.0,min(1.0, pixel ->l+ pixel ->l *(factor/100.0)));
+    
+      
+    } 
+  }
+  return image;
+}
+
+
+PNG adjustVibrance(PNG image, double factor) {
+  if(!factor) return image;
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel *pixel = image.getPixel(x, y);
+      if(pixel->s <0.85){
+        pixel ->s = max(0.0,min(1.0, pixel ->s+ pixel ->s *(factor/100.0)));
+      }
+      
+    } 
+  }
+  return image;
+}
+
+
+PNG adjustWarmth(PNG image, double factor) {
+  if(!factor) return image;
+  
+  if(factor>0){
+    double value = factor/180;
+    for (unsigned x = 0; x < image.width(); x++) {
+      for (unsigned y = 0; y < image.height(); y++) {
+        HSLAPixel *pixel = image.getPixel(x, y);
+        double hue = pixel ->h;
+        if (hue > 0 && hue < 120 ){
+          pixel ->h -= pixel ->h *value;
+        }
+        if (hue >300 && hue < 360 ){
+         pixel ->h += pixel ->h *value;
+      }
+    } 
+  }
+  }else{
+    double value = factor/120.0/4.0;
+    for (unsigned x = 0; x < image.width(); x++) {
+      for (unsigned y = 0; y < image.height(); y++) {
+        HSLAPixel *pixel = image.getPixel(x, y);
+        double hue = pixel ->h;
+        if (hue > 120 && hue < 180 ){
+          pixel ->h += pixel ->h *value;
+        }
+        if (hue >180 && hue < 2850 ){
+          pixel ->h -= pixel ->h *value;
+        }
+     } 
+   }
+  }
+  
   return image;
 }
