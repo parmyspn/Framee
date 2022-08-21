@@ -12,7 +12,6 @@ using namespace cs221util;
 /**
  * Returns an image that has been transformed to grayscale.
  *
- * The saturation of every pixel is set to 0, removing any color.
  *
  * @return The grayscale image.
  */
@@ -29,80 +28,10 @@ PNG grayscale(PNG image) {
 
 
 
-/**
- * Returns an image with a spotlight centered at (`centerX`, `centerY`).
- *
- * A spotlight adjusts the luminance of a pixel based on the distance the pixel
- * is away from the center by decreasing the luminance by 0.5% per 1 pixel euclidean
- * distance away from the center.
- *
- * For example, a pixel 3 pixels above and 4 pixels to the right of the center
- * is a total of `sqrt((3 * 3) + (4 * 4)) = sqrt(25) = 5` pixels away and
- * its luminance is decreased by 2.5% (0.975x its original value).  At a
- * distance over 200 pixels away, the luminance will always 0.
- *
- * The modified PNG is then returned.
- *
- * @param image A PNG object which holds the image data to be modified.
- * @param centerX The center x coordinate of the crosshair which is to be drawn.
- * @param centerY The center y coordinate of the crosshair which is to be drawn.
- *
- * @return The image with a spotlight.
- */
-PNG createSpotlight(PNG image, int centerX, int centerY) {
-   for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.height(); y++) {
-      HSLAPixel *pixel = image.getPixel(x, y);
-      double distance = sqrt((x - centerX)*(x - centerX)+ (y - centerY)*(y - centerY));
-      if(distance > 200) {
-        pixel->l = 0;
-      }
-      pixel->l -= pixel->l * distance * 0.025;
-    }
-  }
-
-  return image;
-}
-
-
-/**
- * Returns a image transformed to UBC colors.
- *
- * The hue of every pixel is set to the a hue value of either yellow or
- * blue, based on if the pixel's hue value is closer to yellow than blue.
- *
- * @param image A PNG object which holds the image data to be modified.
- *
- * @return The UBCify'd image.
-**/
-PNG ubcify(PNG image) {
-   for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.height(); y++) {
-      HSLAPixel *pixel = image.getPixel(x, y);
-      double hue = pixel ->h;
-      if( hue >= 285 ){
-        pixel ->h = 40;
-      }else if(hue < 285 &&  hue >= 210) {
-        pixel ->h = 210;
-      }else if(hue >= 125) {
-        pixel ->h = 210;
-      }else{
-        pixel ->h = 40;
-      }
-
-    }
-  }
-  return image;
-}
-
 
 /**
 * Returns an immge that has been watermarked by another image.
 *
-* The luminance of every pixel of the second image is checked, if that
-* pixel's luminance is 1 (100%), then the pixel at the same location on
-* the first image has its luminance increased by 0.2 (up to a maximum
-* of 1.0).
 *
 * @param firstImage  The first of the two PNGs.
 * @param secondImage The second of the two PNGs.
@@ -128,39 +57,39 @@ PNG watermark(PNG firstImage, PNG secondImage) {
   return firstImage;
 }
 
+/**
+* Returns an image that has been blured.
+*
+*
+* @param image  The image
+*
+* @return The blurred image.
+*/
 
 PNG boxBlur(PNG image) {
  
-
    static double l[1080][1080];
    static double s[1080][1080];
    static double h[1080][1080];
    static double a[1080][1080];
- 
 
-   
-   //cout << width << endl;
-   //cout << height << endl;
-   
 
    for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
       HSLAPixel *pixel = image.getPixel(x, y);
       l[x][y] = pixel -> l ;
-      
       h[x][y] = pixel -> h;
-      
       s[x][y] = pixel ->s;
-     
-      
       a[x][y] = pixel ->a;
-     // cout << h[x][y] << endl;
+
     } 
   }
+
   
   for (unsigned x = 1; x < image.width()-1; x++) {
     for (unsigned y = 1; y < image.height()-1; y++) {
       HSLAPixel *pixel = image.getPixel(x, y);
+      
       pixel -> h = (h[x-1][y-1] + h[x-1][y] + h[x-1][y+1] + h[x][y-1] + h[x][y] + h[x][y+1] + h[x+1][y-1] + h[x+1][y] + h[x+1][y+1])/9 ;
       pixel ->s =  (s[x-1][y-1] + s[x-1][y] + s[x-1][y+1] + s[x][y-1] + s[x][y] + s[x][y+1] + s[x+1][y-1] + s[x+1][y] + s[x+1][y+1])/9;
       pixel ->l = (l[x-1][y-1] + l[x-1][y] + l[x-1][y+1] + l[x][y-1] + l[x][y] + l[x][y+1] + l[x+1][y-1] + l[x+1][y] + l[x+1][y+1])/9;
@@ -168,22 +97,29 @@ PNG boxBlur(PNG image) {
     } 
   }
  
-  
   return image;
 }
 
 
-PNG sharpen(PNG image) {
- 
-   static double l[1080][1080];
+/**
+* Returns an image that has been sharpen.
+*
+*
+* @param image  The image
+*
+* @return The sharpened image.
+*/
 
-   for (unsigned x = 0; x < image.width(); x++) {
+PNG sharpen(PNG image) {
+
+  static double l[1080][1080];
+
+  for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
-      HSLAPixel *pixel = image.getPixel(x, y);
-      l[x][y] = pixel -> l ;   
-    } 
-  }
-  
+       HSLAPixel *pixel = image.getPixel(x, y);
+       l[x][y] = pixel -> l ;   
+      } 
+     }
   for (unsigned x = 1; x < image.width()-1; x++) {
     for (unsigned y = 1; y < image.height()-1; y++) {
       HSLAPixel *pixel = image.getPixel(x, y);
@@ -191,61 +127,60 @@ PNG sharpen(PNG image) {
     } 
   }
  
-  
   return image;
 }
 
 
 
+/**
+* Returns an image that has been ridge detected.
+*
+*
+* @param image  The image
+*
+* @return The ridge detected image.
+*/
+
 PNG ridgeDetect(PNG image) {
  
-
    static double l[1080][1080];
-   static double s[1080][1080];
-   static double h[1080][1080];
-   static double a[1080][1080];
- 
 
    for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
       HSLAPixel *pixel = image.getPixel(x, y);
       l[x][y] = pixel -> l ;
-      h[x][y] = pixel -> h;
-      s[x][y] = pixel ->s;
-      a[x][y] = pixel ->a;
     } 
   }
   
   for (unsigned x = 1; x < image.width()-1; x++) {
     for (unsigned y = 1; y < image.height()-1; y++) {
       HSLAPixel *pixel = image.getPixel(x, y);
-      //pixel ->h = -h[x-1][y-1] -h[x-1][y] - h[x-1][y+1] - h[x][y-1] + 8 * h[x][y] - h[x][y+1] - h[x+1][y-1] - h[x+1][y] - h[x+1][y+1] ;
-      //pixel ->s = -s[x-1][y-1] - s[x-1][y] - s[x-1][y+1] - s[x][y-1] + 8 * s[x][y] - s[x][y+1] - s[x+1][y-1] - s[x+1][y] - s[x+1][y+1] ;
       pixel->l = -l[x-1][y-1] - l[x-1][y] - l[x-1][y+1] - l[x][y-1] + 8 * l[x][y] - l[x][y+1] - l[x+1][y-1] - l[x+1][y] - l[x+1][y+1];
-      
     } 
   }
   return image;
 }
 
+/**
+* Returns an image that has been edge detected.
+*
+*
+* @param image  The image
+*
+* @return The edge detected image.
+*/
 
 PNG edgeDetect(PNG image) {
- 
    
    static double l[1080][1080];
- 
    static double h[1080][1080];
    
- 
-
    for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
       HSLAPixel *pixel = image.getPixel(x, y);
       l[x][y] = pixel -> l ;
       h[x][y] = pixel -> h;
       pixel ->s = 0;
-      
-      
     } 
   }
   
@@ -253,13 +188,9 @@ PNG edgeDetect(PNG image) {
     for (unsigned y = 1; y < image.height()-1; y++) {
       HSLAPixel *pixel = image.getPixel(x, y);
       
-      double hx = (h[x+1][y-1] +2* h[x+1][y] + h[x+1][y+1])/(h[x-1][y-1] +2*h[x-1][y] + h[x-1][y+1])  ;
+      double hx = (h[x+1][y-1] +2* h[x+1][y] + h[x+1][y+1])/(h[x-1][y-1] +2*h[x-1][y] + h[x-1][y+1]);
       double hy = ( h[x-1][y+1] + 2*h[x][y+1] +h[x+1][y+1])/(h[x-1][y-1] +h[x][y-1] +h[x+1][y-1]  );
-     // double hy =  h[x-1][y-1] - h[x-1][y+1] +2 * h[x][y-1] -2* h[x][y+1] +h[x+1][y-1]  - h[x+1][y+1] ;
       pixel ->h = sqrt(pow(hx,2)+pow(hy,2));
-
-   
-  
 
       double lx = -l[x-1][y-1] -2*l[x-1][y] - l[x-1][y+1]  + l[x+1][y-1] +2* l[x+1][y] + l[x+1][y+1] ;
       double ly =  l[x-1][y-1] - l[x-1][y+1] +2 * l[x][y-1] -2* l[x][y+1] +l[x+1][y-1]  - l[x+1][y+1] ;
@@ -270,7 +201,15 @@ PNG edgeDetect(PNG image) {
   return image;
 }
 
-
+/**
+* Returns an image that its brightness has been adjusted
+*
+*
+* @param image  The image
+* @param image  The factor of adjustment
+*
+* @return The adjusted image.
+*/
 
 PNG adjustBrightness(PNG image, double factor) {
   if(!factor) return image;
@@ -284,6 +223,17 @@ PNG adjustBrightness(PNG image, double factor) {
   }
   return image;
 }
+
+
+/**
+* Returns an image that its vibrance has been adjusted
+*
+*
+* @param image  The image
+* @param image  The factor of adjustment
+*
+* @return The adjusted image.
+*/
 
 
 PNG adjustVibrance(PNG image, double factor) {
@@ -301,9 +251,17 @@ PNG adjustVibrance(PNG image, double factor) {
 }
 
 
+/**
+* Returns an image that its warmth has been adjusted
+*
+*
+* @param image  The image
+* @param image  The factor of adjustment
+*
+* @return The adjusted image.
+*/
 PNG adjustWarmth(PNG image, double factor) {
   if(!factor) return image;
-  
   if(factor>0){
     double value = factor/180;
     for (unsigned x = 0; x < image.width(); x++) {
@@ -327,7 +285,7 @@ PNG adjustWarmth(PNG image, double factor) {
         if (hue > 120 && hue < 180 ){
           pixel ->h += pixel ->h *value;
         }
-        if (hue >180 && hue < 2850 ){
+        if (hue >180 && hue < 285 ){
           pixel ->h -= pixel ->h *value;
         }
      } 

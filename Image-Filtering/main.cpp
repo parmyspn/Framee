@@ -13,7 +13,7 @@ int main() {
   cs221util::PNG png, png2, result;
 
   png.readFromFile("rosegarden.png");
-  result = adjustWarmth(png, -100);
+  result = adjustWarmth(png, 100);
   result.writeToFile("out-warmth.png");
 
 
@@ -46,11 +46,7 @@ int main() {
   result = sharpen(png);
   result.writeToFile("out-sharpen.png");
   
-  result = createSpotlight(png, 300, 300);
-  result.writeToFile("out-spotlight.png");
 
-  result = ubcify(png);
-  result.writeToFile("out-ubcify.png");
 
   png2.readFromFile("overlay.png");
   result = watermark(png, png2);
