@@ -27,7 +27,7 @@ int main() {
   PTree tree(png);
 
   // pruning tree
-  tree.Prune(0.05);
+  tree.Prune(0.02);
   int treesize = tree.Size();
   int treenumleaves = tree.NumLeaves();
 
@@ -35,7 +35,7 @@ int main() {
 
   result = tree.Render();
 
-  result.writeToFile("images/prune-kkkk-tol005.png");
+  result.writeToFile("images/prune-kkkk-tol002.png");
   
   return 0;
 }
