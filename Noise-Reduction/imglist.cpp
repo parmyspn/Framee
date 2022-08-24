@@ -251,13 +251,6 @@ ImgNode *ImgList::SelectNode(ImgNode *rowstart, int selectionmode)
  *             Average of diametric hue values will use the smaller of the two averages
  *             e.g. average of 30 and 210 will be 120, and not 300
  *                  average of 170 and 350 will be 80, and not 260
- *          2: *** OPTIONAL - FOR BONUS ***
- *             linear gradient between the colour (all channels) of the nodes at the left and right of the gap
- *             e.g. a gap of width 1 will be coloured with 1/2 of the difference between the left and right nodes
- *             a gap of width 2 will be coloured with 1/3 and 2/3 of the difference
- *             a gap of width 3 will be coloured with 1/4, 2/4, 3/4 of the difference, etc.
- *             Like fillmode 1, use the smaller difference interval for hue,
- *             and the smaller-valued average for diametric hues
  */
 PNG ImgList::Render(bool fillgaps, int fillmode) const
 {
@@ -278,7 +271,7 @@ PNG ImgList::Render(bool fillgaps, int fillmode) const
     while (temp != NULL)
     {
       row = temp;
-      while (row != NULL)
+      while (row  != NULL)
       {
         HSLAPixel *p = outpng.getPixel(y, x);
         *p = row->colour;
@@ -303,7 +296,7 @@ PNG ImgList::Render(bool fillgaps, int fillmode) const
       while (temp != NULL)
       {
         row = temp;
-        while (row != NULL)
+        while (row  != NULL)
         {
           if (row->skipright != 0)
           {

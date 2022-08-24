@@ -2,9 +2,9 @@ EXEPTree = main
 OBJS  = PNG.o HSLAPixel.o lodepng.o hue_utils.o main.o ptree.o
 
 CXX = clang++
-CXXFLAGS = -stdlib=libc++ -std=c++1y -c -g -O0 -Wall -Wextra -pedantic
+CXXFLAGS = -stdlib=libc++ -std=c++1y  -c -g -O0 -Wall -Wextra -pedantic
 LD = clang++
-LDFLAGS = -stdlib=libc++ -std=c++1y -lc++abi -lpthread -lm
+LDFLAGS = -stdlib=libc++ -std=c++1y -lc++abi  -lpthread -lm
 
 all : main
 

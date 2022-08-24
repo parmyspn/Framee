@@ -294,3 +294,41 @@ PNG adjustWarmth(PNG image, double factor) {
   
   return image;
 }
+
+
+
+PNG adjustBrightnessVibranceWarmth(PNG image, double brightnessFactor, double vibranceFactor , double warmthFactor) {
+   for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel *pixel = image.getPixel(x, y);
+      pixel ->l = max(0.0,min(1.0, pixel ->l+ pixel ->l *(brightnessFactor/100.0)));
+
+      if(pixel->s <0.85){
+        pixel ->s = max(0.0,min(1.0, pixel ->s+ pixel ->s *(vibranceFactor/100.0)));
+      }
+
+      if(warmthFactor>0){
+        double value = warmthFactor/180;
+        double hue = pixel ->h;
+        if (hue > 0 && hue < 120 ){
+          pixel ->h -= pixel ->h *value;
+        }
+        if (hue >300 && hue < 360 ){
+         pixel ->h += pixel ->h *value;
+        }
+      }else{
+         double value = warmthFactor/120.0/4.0;
+         HSLAPixel *pixel = image.getPixel(x, y);
+         double hue = pixel ->h;
+         if (hue > 120 && hue < 180 ){
+           pixel ->h += pixel ->h *value;
+         }
+         if (hue >180 && hue < 285 ){
+           pixel ->h -= pixel ->h *value;
+         }
+      } 
+    } 
+  }
+  return image;
+
+}
