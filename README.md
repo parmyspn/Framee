@@ -8,7 +8,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+[![LinkedIn][linkedin-shield]][www.linkedin.com/in/parmisparvin]
 
 
 
@@ -147,9 +147,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Your Name - [@linkedin_handle](www.linkedin.com/in/parmisparvin) - parmisprv@gmail.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/parmyspn/framee](https://github.com/parmyspn/framee)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
