@@ -26,7 +26,7 @@ void exitMessage(string message) {
 
 string mainMenu(){
   string adjustment;
-  cout << "Please enter the Filter or Adjustment:\n" << "\t1.Blur\n" <<"\t2.Sharpen\n" <<"\t3.Edge Detection\n" << "\t4.Ridge Detection\n" <<"\t5.Adjust Brightness\n"<< "\t6.Adjust Vibrance\n" <<"\t7.Adjust Warmth\n"<< "\t8.Adjust Brightness Vibrance and Warmth\n" <<"\t9.Export image\n" << endl;
+  cout << "Please enter the Filter or Adjustment:\n" << "\t1.Blur\n" <<"\t2.Sharpen\n" <<"\t3.Edge Detection\n" << "\t4.Ridge Detection\n" <<"\t5.Adjust Brightness\n"<< "\t6.Adjust Vibrance\n" <<"\t7.Adjust Warmth\n"<< "\t8.Adjust Brightness Vibrance and Warmth\n" <<"\t9.Reduce severe noise"<<"\t10.Export image\n" << endl;
   cin >> adjustment;
   return  adjustment;
 }
@@ -97,6 +97,10 @@ int main() {
         adjustment = mainMenu();
         break;
       case 9:
+        png = boxBlur(png);
+        adjustment = mainMenu();
+        break;
+      case 10:
         flag = 0;
         break;
       default:

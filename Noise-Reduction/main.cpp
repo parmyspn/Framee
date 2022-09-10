@@ -64,15 +64,14 @@ int main() {
   while(flag == 1)
     switch(stoi(adjustment)){
       case 1:
-        //carvedPixels = enterMeasure("Please enter the number of noised pixels you want to reduce: ");
         selectionMode = enterMeasure("Please enter noise selection mode:\n 1.Least luminance\n 2.Maximum color difference\n" );
-        list.Carve(5, selectionMode-1);
+        list.Carve(1,selectionMode-1);
         fill = true;
         adjustment = mainMenu();
         break;
       case 2:
         flag = 0;
-        png = list.Render(fill , 0);
+        png = list.Render(fill , 1);
         break;
       default:
         exitMessage("No Valid Operation");
