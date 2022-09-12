@@ -80,7 +80,6 @@ Node *PTree::BuildNode(PNG &im, pair<unsigned int, unsigned int> ul, unsigned in
  */
 PTree::PTree(PNG &im)
 {
-  // add your implementation below
   root = BuildNode(im, make_pair(0, 0), im.width(), im.height());
 }
 
@@ -109,7 +108,7 @@ PTree::PTree(const PTree &other)
  */
 PTree &PTree::operator=(const PTree &other)
 {
-  // add your implementation below
+
   Copy(other);
 
   return *this;
