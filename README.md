@@ -68,7 +68,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](../images/screenshot.png)
 
 Framee is a well tested image processor command line application. It consists of three major fields of image processing: Image filtering, Noise reduction and compressor. Each of these is implemented by a different data structure to serve the purpose in the most efficient way. 
 
