@@ -67,6 +67,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+![rosegarden](https://user-images.githubusercontent.com/93885987/195710194-7129184f-3994-4b81-bc39-3d03ef1ddf9c.png)
 
 [![Product Name Screen Shot][product-screenshot]](./images/screenshot.png)
 
